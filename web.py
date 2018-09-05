@@ -1,6 +1,7 @@
 from aiohttp import web
 import socketio, json
 from cgi import parse_qs, escape
+import json
 
 
 sio = socketio.AsyncServer()
@@ -35,18 +36,18 @@ async def login(sid, data):
 
 @sio.on('dados_aluno')
 async def dados_aluno(sid, data):
-    print("Usuario: ",users[sid])
-    data = data[1:-1].replace("\\\"","\"")
-    #data_json = json.loads(data[1:-1])
-    print(json.dumps(json.loads(data), indent=4, sort_keys=True))
-    print('oi')
+    print('Evento: ' + data['evento'])
+    info = json.loads(data['projeto'])
+    test = json.dumps(info['targets'][1]['blocks'])
+    print("Bloco: " + test)
+
 
 @sio.on('disconnect')
 def disconnect(sid):
     users.pop(sid)
     print('disconnect ', sid)
 
-app.router.add_static('/', './../scratch-gui/build')
+app.router.add_static('/', 'F:/Projects/TCC/elimu_scratch_analyzer/scratch-gui/build')
 # app.router.add_get('/', index)
 
 if __name__ == '__main__':
