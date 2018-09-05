@@ -1,5 +1,5 @@
 from aiohttp import web
-import socketio
+import socketio, json
 from cgi import parse_qs, escape
 
 
@@ -9,9 +9,8 @@ sio.attach(app)
 
 users = dict()
 class User:
-    def __init__(self, sid, fingerprint):
+    def __init__(self, sid):
         self.sid = sid
-        self.fingerprint = fingerprint
         self.nickname = ""
     def setNickname(self, nickname):
         self.nickname = nickname
@@ -20,25 +19,27 @@ class User:
     def __repr__(self):
         return self.__str__()
     def __str__(self):
-        return "{} : sid ({}), fingerprint ({})".format(self.nickname,self.sid,self.fingerprint)
+        return "{} : sid ({})".format(self.nickname,self.sid)
 
 @sio.on('connect')
 def connect(sid, environ):
     print("connect ", sid)
-    query_string = parse_qs(environ['QUERY_STRING'])
-    users[sid] = User(sid, query_string['fingerprint'])
-
+    users[sid] = User(sid)
+ 
 
 @sio.on('login')
 async def login(sid, data):
-    print("nome de usuario ", data)
+    print("nome de usuario ",sid, data)
     users[sid].setNickname(data)
     print(users)
 
 @sio.on('dados_aluno')
 async def dados_aluno(sid, data):
-    print(data)
-
+    print("Usuario: ",users[sid])
+    data = data[1:-1].replace("\\\"","\"")
+    #data_json = json.loads(data[1:-1])
+    print(json.dumps(json.loads(data), indent=4, sort_keys=True))
+    print('oi')
 
 @sio.on('disconnect')
 def disconnect(sid):
