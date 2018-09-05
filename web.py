@@ -47,8 +47,11 @@ def disconnect(sid):
     users.pop(sid)
     print('disconnect ', sid)
 
-app.router.add_static('/', 'F:/Projects/TCC/elimu_scratch_analyzer/scratch-gui/build')
-# app.router.add_get('/', index)
+async def index():
+    raise web.HTTPFound(location="andersou.github.io/scratch-gui")
+    
+#app.router.add_static('/', 'F:/Projects/TCC/elimu_scratch_analyzer/scratch-gui/build')
+app.router.add_get('/', index)
 
 if __name__ == '__main__':
     web.run_app(app)
