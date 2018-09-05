@@ -1,5 +1,5 @@
 from aiohttp import web
-import socketio, json
+import socketio, json, os
 from cgi import parse_qs, escape
 import json
 
@@ -47,11 +47,11 @@ def disconnect(sid):
     users.pop(sid)
     print('disconnect ', sid)
 
-async def index():
-    raise web.HTTPFound(location="andersou.github.io/scratch-gui")
+async def index(request):
+    raise web.HTTPFound(location="https://andersou.github.io/scratch-gui")
     
 #app.router.add_static('/', 'F:/Projects/TCC/elimu_scratch_analyzer/scratch-gui/build')
 app.router.add_get('/', index)
 
 if __name__ == '__main__':
-    web.run_app(app)
+    web.run_app(app, port=os.environ.get('PORT',8080))
