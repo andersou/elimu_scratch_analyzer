@@ -64,10 +64,13 @@ async def dados_aluno(sid, data):
     info = json.loads(data['projeto'])
     test = json.dumps(info['targets'][1]['blocks'])
     print("Bloco: " + test)
+    try:
     cursor = mydb.cursor(prepared=True)
     cursor.execute("INSERT INTO scratch_data_analytics (sid,nome,evento,vm) VALUES (%s,%s,%s,%s)",(sid,users[sid].nickname,data['evento'],data['projeto']))
     cursor.close()
-
+    except Error as detail:
+        print(detail)
+        
 @sio.on('disconnect')
 def disconnect(sid):
     users.pop(sid)
