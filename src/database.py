@@ -39,8 +39,10 @@ class ScratchData:
 
     def getInsertParams(self):
         user = self.user
-        return (user.sid,self.nome,self.evento,self.vm,self.data_insercao)
+        return (user.sid,user.nickname,self.evento,self.vm,self.data_insercao)
 
     @staticmethod
     def getInsertQuery():
         return "INSERT INTO scratch_data_analytics (sid,nome,evento,vm,data_insercao) VALUES (%s,%s,%s,%s,%s)"
+    def __str__(self):
+        return "{} - {}".format(self.user.nickname, self.evento)

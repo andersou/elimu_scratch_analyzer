@@ -41,7 +41,15 @@ def disconnect(sid):
 async def index(request):
     raise web.HTTPFound(location="https://andersou.github.io/scratch-gui")
 
+async def teste(request):
+    aluno = User("aaaaaaaa")
+    aluno.setNickname("bbbb")
+    dto = db.ScratchData("Teste", aluno, "vm")
+    dbpool.addRequisicao(dto)
+    return web.Response(text="Testou!")
+
 app.router.add_get('/', index)
+app.router.add_get('/teste', teste)
 def run():
     db.init()
     dbpool.init()

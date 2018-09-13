@@ -4,11 +4,12 @@ fila_req = queue.Queue()
 async def processaRequisicao():
     while True:
         req = fila_req.get()
-        print("Nova requisicao")
+        print("Processando . . . ")
         print(req)
-        db.getConnection()
-        cursor = db.cursor()
+        mydb = db.getConnection()
+        cursor = mydb.cursor()
         cursor.execute(db.ScratchData.getInsertQuery(),req.getInsertParams())
+        mydb.commit()
 
 def init():
     loop = asyncio.new_event_loop()
