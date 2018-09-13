@@ -6,6 +6,7 @@ chardet==3.0.4
 idna==2.7
 idna-ssl==1.0.1
 multidict==4.3.1
+mysql-connector==2.1.6
 python-engineio==2.1.1
 python-socketio==1.9.0
 six==1.11.0

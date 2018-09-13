@@ -2,7 +2,30 @@ from aiohttp import web
 import socketio, json, os
 from cgi import parse_qs, escape
 import json
+import mysql.connector
 
+DB_HOST = "sql52.main-hosting.eu"
+DB_NAME = "u817691809_elimu"
+DB_USER = os.environ['DB_USER_ELIMU']
+DB_PASS = os.environ['DB_PASS_ELIMU']
+
+mydb = mysql.connector.connect(
+  host=DB_HOST,
+  user=DB_USER,
+  password=DB_PASS,
+  database=DB_NAME
+)
+
+mycursor = mydb.cursor()
+
+mycursor.execute("""
+CREATE TABLE IF NOT EXISTS scratch_data_analytics (
+	id MEDIUMINT PRIMARY KEY AUTO_INCREMENT,
+	sid VARCHAR(255),
+	nome VARCHAR(255),
+	vm MEDIUMTEXT,
+	data_insercao TIMESTAMP DEFAULT NOW()
+)""")
 
 sio = socketio.AsyncServer()
 app = web.Application()
@@ -40,6 +63,8 @@ async def dados_aluno(sid, data):
     info = json.loads(data['projeto'])
     test = json.dumps(info['targets'][1]['blocks'])
     print("Bloco: " + test)
+    cur = conn.cursor()
+    cur
 
 
 @sio.on('disconnect')
