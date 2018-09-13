@@ -15,17 +15,18 @@ mydb = mysql.connector.connect(
   password=DB_PASS,
   database=DB_NAME
 )
-
-mycursor = mydb.cursor()
-
-mycursor.execute("""
+cursor = mydb.cursor(prepared=True)
+cursor.execute("""
 CREATE TABLE IF NOT EXISTS scratch_data_analytics (
 	id MEDIUMINT PRIMARY KEY AUTO_INCREMENT,
 	sid VARCHAR(255),
 	nome VARCHAR(255),
+	evento VARCHAR(255),
 	vm MEDIUMTEXT,
 	data_insercao TIMESTAMP DEFAULT NOW()
 )""")
+mydb.commit()
+
 
 sio = socketio.AsyncServer()
 app = web.Application()
@@ -63,8 +64,7 @@ async def dados_aluno(sid, data):
     info = json.loads(data['projeto'])
     test = json.dumps(info['targets'][1]['blocks'])
     print("Bloco: " + test)
-    cur = conn.cursor()
-    cur
+    cursor.execute("INSERT INTO scratch_data_analytics (sid,nome,evento,vm) VALUES (%s,%s,%s,%s)",(sid,users[sid].nickname,data['evento'],data['projeto']))
 
 
 @sio.on('disconnect')
