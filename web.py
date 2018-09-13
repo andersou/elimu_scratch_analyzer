@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS scratch_data_analytics (
 	vm MEDIUMTEXT,
 	data_insercao TIMESTAMP DEFAULT NOW()
 )""")
-mydb.commit()
+# mydb.commit()
 cursor.close()
 
 sio = socketio.AsyncServer()
