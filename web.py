@@ -15,7 +15,7 @@ mydb = mysql.connector.connect(
   password=DB_PASS,
   database=DB_NAME
 )
-cursor = mydb.cursor(prepared=True)
+cursor = mydb.cursor()
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS scratch_data_analytics (
 	id MEDIUMINT PRIMARY KEY AUTO_INCREMENT,
@@ -65,6 +65,12 @@ async def dados_aluno(sid, data):
     test = json.dumps(info['targets'][1]['blocks'])
     print("Bloco: " + test)
     try:
+        mydb = mysql.connector.connect(
+            host=DB_HOST,
+            user=DB_USER,
+            password=DB_PASS,
+            database=DB_NAME
+        )
         cursor = mydb.cursor(prepared=True)
         cursor.execute("INSERT INTO scratch_data_analytics (sid,nome,evento,vm) VALUES (%s,%s,%s,%s)",(sid,users[sid].nickname,data['evento'],data['projeto']))
         cursor.close()
